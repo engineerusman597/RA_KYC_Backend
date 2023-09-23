@@ -11,6 +11,7 @@ namespace RA_KYC_BE.Application.Interfaces.GenericRepositories
         IClientsRepository Clients { get; }
         IBusinessTypesRepository BusinessTypes { get; }
         IEducationLevelRepository EducationLevels { get; }
+        IRiskCategoriesRepository RiskCategories { get; }
         Task<int> Complete();
     }
 }

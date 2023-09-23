@@ -48,12 +48,13 @@ namespace RA_KYC_BE.API.Controllers.Content
         }
 
         [HttpPut()]
-        public async Task<IActionResult> Put([FromBody] CustomerTypesDto CustomerTypesDto)
+        public async Task<IActionResult> Put([FromBody] CustomerTypesDto customerTypesDto)
         {
-            var businessTypesFromDB = await _unitOfWork.CustomerTypes.GetById(CustomerTypesDto.Id);
-            businessTypesFromDB = _mapper.Map<CustomerTypes>(CustomerTypesDto);
-            businessTypesFromDB.UpdatedBy = UserId;
-            businessTypesFromDB.UpdatedOn = DateTimeOffset.UtcNow;
+            var customerTypesFromDB = await _unitOfWork.CustomerTypes.GetById(customerTypesDto.Id);
+            customerTypesFromDB.Name = customerTypesDto.Name;
+            customerTypesFromDB.IsActive = customerTypesDto.IsActive;
+            customerTypesFromDB.UpdatedBy = UserId;
+            customerTypesFromDB.UpdatedOn = DateTimeOffset.UtcNow;
             return Ok(await _unitOfWork.Complete());
         }
 

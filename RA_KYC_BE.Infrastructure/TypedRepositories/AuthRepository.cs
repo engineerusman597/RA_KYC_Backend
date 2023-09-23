@@ -106,10 +106,10 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
 
             //checking the Email and username
             if (userEmail is not null)
-                return new AuthResponse { Message = "Email is Already used ! " };
+                return new AuthResponse { Message = "Email is already used! " };
 
             if (userName is not null)
-                return new AuthResponse { Message = "Username is Already used ! " };
+                return new AuthResponse { Message = "Username is already used! " };
 
             //fill
             var user = new AppUser

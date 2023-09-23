@@ -20,6 +20,7 @@ namespace Infrastructure.Content.Data
         public DbSet<CustomerTypes> CustomerTypes { get; set; }
         public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<MaritalStatus> MaritalStatuses { get; set; }
+        public DbSet<RiskCategories> RiskCategories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

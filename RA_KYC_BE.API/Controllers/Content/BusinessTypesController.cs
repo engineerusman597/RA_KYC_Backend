@@ -51,7 +51,8 @@ namespace RA_KYC_BE.API.Controllers.Content
         public async Task<IActionResult> Put([FromBody] BusinessTypesDto businessTypesDto)
         {
             var businessTypesFromDB = await _unitOfWork.BusinessTypes.GetById(businessTypesDto.Id);
-            businessTypesFromDB = _mapper.Map<BusinessTypes>(businessTypesDto);
+            businessTypesFromDB.Name = businessTypesDto.Name;
+            businessTypesFromDB.IsActive = businessTypesDto.IsActive;
             businessTypesFromDB.UpdatedBy = UserId;
             businessTypesFromDB.UpdatedOn = DateTimeOffset.UtcNow;
             return Ok(await _unitOfWork.Complete());

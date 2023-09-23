@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using RA_KYC_BE.Application.Dtos.CustomerTypes;
 using RA_KYC_BE.Application.Dtos.EducationLevel;
 using RA_KYC_BE.Application.Interfaces.GenericRepositories;
 using RA_KYC_BE.Domain.Entities;
@@ -51,7 +52,8 @@ namespace RA_KYC_BE.API.Controllers.Content
         public async Task<IActionResult> Put([FromBody] EducationLevelDto educationLevelDto)
         {
             var educationLevel = await _unitOfWork.EducationLevels.GetById(educationLevelDto.Id);
-            educationLevel = _mapper.Map<EducationLevel>(educationLevelDto);
+            educationLevel.Level = educationLevelDto.Level;
+            educationLevel.IsActive = educationLevelDto.IsActive;
             educationLevel.UpdatedBy = UserId;
             educationLevel.UpdatedOn = DateTimeOffset.UtcNow;
             return Ok(await _unitOfWork.Complete());
