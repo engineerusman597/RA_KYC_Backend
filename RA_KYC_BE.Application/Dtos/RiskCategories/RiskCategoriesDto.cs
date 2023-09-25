@@ -15,6 +15,9 @@ namespace RA_KYC_BE.Application.Dtos.RiskCategories
         public string LowRiskQuestion { get; set; }
         public string ModerateRiskQuestion { get; set; }
         public string HighRiskQuestion { get; set; }
+        public string InherentRisk { get; set; }
+        public double Score { get; set; }
+        public string CalculatedRating { get; set; }
         public bool IsActive { get; set; }
         public List<ChildrenRiskCategoriesDto> ChildrenCategories { get; set; }
     }
