@@ -19,7 +19,7 @@ namespace RA_KYC_BE.API.Controllers.Content
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] RiskCategoriesDto riskCategoriesDto)
+        public async Task<IActionResult> Post([FromBody] AddRiskCategoriesDto riskCategoriesDto)
         {
             var riskCategories = _mapper.Map<RiskCategories>(riskCategoriesDto);
             riskCategories.CreatedBy = UserId;
@@ -44,7 +44,19 @@ namespace RA_KYC_BE.API.Controllers.Content
         public async Task<IActionResult> GetAll()
         {
             var riskCategories = await _unitOfWork.RiskCategories.GetAll();
-            return Ok(_mapper.Map<List<RiskCategoriesDto>>(riskCategories));
+            var riskCategoriesDtos = _mapper.Map<List<RiskCategoriesDto>>(riskCategories);
+            var childrenRiskCategories = await _unitOfWork.RiskCategories.GetChildrenRiskCategories();
+            foreach (var riskCategory in riskCategoriesDtos)
+            {
+                foreach (var childrenRiskCategory in childrenRiskCategories)
+                {
+                    if(riskCategory.RiskCategoryCode == childrenRiskCategory.ParentCode)
+                    {
+                        riskCategory.ChildrenCategories.Add(childrenRiskCategory);
+                    }
+                }
+            }
+            return Ok(riskCategoriesDtos);
         }
 
         [HttpPut()]

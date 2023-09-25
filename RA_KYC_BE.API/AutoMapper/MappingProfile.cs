@@ -28,6 +28,8 @@ namespace RA_KYC_BE.API.AutoMapper
             CreateMap<EducationLevel, EducationLevelDto>();
             CreateMap<RiskCategoriesDto, RiskCategories>();
             CreateMap<RiskCategories, RiskCategoriesDto>();
+            CreateMap<AddRiskCategoriesDto, RiskCategories>();
+            CreateMap<RiskCategories, AddRiskCategoriesDto>();
         }
     }
 }

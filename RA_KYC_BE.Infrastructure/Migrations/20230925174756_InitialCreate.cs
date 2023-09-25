@@ -148,6 +148,28 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RiskCategories",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RiskCategoryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LowRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModerateRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HighRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RiskCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerDetails",
                 columns: table => new
                 {
@@ -457,6 +479,9 @@ namespace RA_KYC_BE.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "MaritalStatuses");
+
+            migrationBuilder.DropTable(
+                name: "RiskCategories");
 
             migrationBuilder.DropTable(
                 name: "CustomerDetails");

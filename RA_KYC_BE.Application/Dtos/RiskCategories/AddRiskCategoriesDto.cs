@@ -2,12 +2,8 @@
 
 namespace RA_KYC_BE.Application.Dtos.RiskCategories
 {
-    public class RiskCategoriesDto
+    public class AddRiskCategoriesDto
     {
-        public RiskCategoriesDto()
-        {
-            ChildrenCategories = new List<ChildrenRiskCategoriesDto>();
-        }
         public int Id { get; set; }
         [Required]
         public string RiskCategoryCode { get; set; }
@@ -16,6 +12,5 @@ namespace RA_KYC_BE.Application.Dtos.RiskCategories
         public string ModerateRiskQuestion { get; set; }
         public string HighRiskQuestion { get; set; }
         public bool IsActive { get; set; }
-        public List<ChildrenRiskCategoriesDto> ChildrenCategories { get; set; }
     }
 }

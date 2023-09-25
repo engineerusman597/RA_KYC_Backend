@@ -1,9 +1,11 @@
-﻿using RA_KYC_BE.Application.Interfaces.Repositories;
+﻿using RA_KYC_BE.Application.Dtos.RiskCategories;
+using RA_KYC_BE.Application.Interfaces.Repositories;
 using RA_KYC_BE.Domain.Entities;
 
 namespace RA_KYC_BE.Application.Interfaces.TypedRepositories
 {
     public interface IRiskCategoriesRepository : IGenericRepository<RiskCategories>
     {
+        Task<List<ChildrenRiskCategoriesDto>> GetChildrenRiskCategories();
     }
 }
