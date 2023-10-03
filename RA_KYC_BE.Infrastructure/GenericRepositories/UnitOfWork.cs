@@ -18,7 +18,7 @@ namespace RA_KYC_BE.Infrastructure.GenericRepositories
             BusinessTypes = new BusinessTypesRepository(_context);
             Clients = new ClientsRepository(_context);
             EducationLevels = new EducationLevelRepository(_context);
-            RiskCategories = new RiskCategoriesRepository(_context);
+            BSAs = new BSARepository(_context);
         }
         public ICustomerDetailsRepository CustomerDetails { get; private set; }
         public ICustomerRiskFactorsRepository CustomerRiskFactors { get; private set; }
@@ -27,7 +27,7 @@ namespace RA_KYC_BE.Infrastructure.GenericRepositories
         public IBusinessTypesRepository BusinessTypes { get; private set; }
         public IClientsRepository Clients { get; private set; }
         public IEducationLevelRepository EducationLevels { get; private set; }
-        public IRiskCategoriesRepository RiskCategories { get; private set; }
+        public IBSARepository BSAs { get; private set; }
         public async Task<int> Complete() => await _context.SaveChangesAsync();
         public void Dispose() => _context.Dispose();
     }

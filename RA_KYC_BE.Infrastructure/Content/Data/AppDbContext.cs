@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using RA_KYC_BE.Domain.Entities;
 using RA_KYC_BE.Infrastructure.Identity.Models;
-using RA_KYC_BE.Domain.Entities;
 
 namespace Infrastructure.Content.Data
 {
@@ -20,7 +19,11 @@ namespace Infrastructure.Content.Data
         public DbSet<CustomerTypes> CustomerTypes { get; set; }
         public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<MaritalStatus> MaritalStatuses { get; set; }
-        public DbSet<RiskCategories> RiskCategories { get; set; }
+        public DbSet<BSAAssessmentBasis> BSAAssessmentBasis { get; set; }
+        public DbSet<BSAControls> BSAControls { get; set; }
+        public DbSet<OFACAssessmentBasis> OFACAssessmentBasis { get; set; }
+        public DbSet<OFACControl> OFACControl { get; set; }
+        public DbSet<BSARiskMatrix> BSARiskMatrices { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

@@ -1,6 +1,6 @@
-﻿namespace RA_KYC_BE.Application.Dtos.RiskCategories
+﻿namespace RA_KYC_BE.Application.Dtos.BSA
 {
-    public class ChildrenRiskCategoriesDto
+    public class BSAControlsDto
     {
         public int Id { get; set; }
         public string ParentCode { get; set; }

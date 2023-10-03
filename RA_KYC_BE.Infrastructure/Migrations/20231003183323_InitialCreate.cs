@@ -12,6 +12,80 @@ namespace RA_KYC_BE.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "BSAAssessmentBasis",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RiskCategoryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LowRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModerateRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HighRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RowInFFIECAppendix = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSAAssessmentBasis", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BSAControls",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ControlCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Strong3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adequate2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Weak1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSAControls", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BSARiskMatrices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RowInFFIECAppendix = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MitigatingControls = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSARiskMatrices", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BusinessTypes",
                 columns: table => new
                 {
@@ -148,7 +222,7 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "RiskCategories",
+                name: "OFACAssessmentBasis",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -166,7 +240,33 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RiskCategories", x => x.Id);
+                    table.PrimaryKey("PK_OFACAssessmentBasis", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OFACControl",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ControlCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Strong3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Adequate2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Weak1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OFACControl", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -448,6 +548,15 @@ namespace RA_KYC_BE.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "BSAAssessmentBasis");
+
+            migrationBuilder.DropTable(
+                name: "BSAControls");
+
+            migrationBuilder.DropTable(
+                name: "BSARiskMatrices");
+
+            migrationBuilder.DropTable(
                 name: "BusinessTypes");
 
             migrationBuilder.DropTable(
@@ -481,7 +590,10 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 name: "MaritalStatuses");
 
             migrationBuilder.DropTable(
-                name: "RiskCategories");
+                name: "OFACAssessmentBasis");
+
+            migrationBuilder.DropTable(
+                name: "OFACControl");
 
             migrationBuilder.DropTable(
                 name: "CustomerDetails");

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RA_KYC_BE.Application.Dtos.RiskCategories
+namespace RA_KYC_BE.Application.Dtos.BSA
 {
-    public class RiskCategoriesDto
+    public class BSADto
     {
-        public RiskCategoriesDto()
+        public BSADto()
         {
-            ChildrenCategories = new List<ChildrenRiskCategoriesDto>();
+            ChildrenCategories = new List<BSAControlsDto>();
         }
         public int Id { get; set; }
         [Required]
@@ -19,6 +19,6 @@ namespace RA_KYC_BE.Application.Dtos.RiskCategories
         public double Score { get; set; }
         public string CalculatedRating { get; set; }
         public bool IsActive { get; set; }
-        public List<ChildrenRiskCategoriesDto> ChildrenCategories { get; set; }
+        public List<BSAControlsDto> ChildrenCategories { get; set; }
     }
 }

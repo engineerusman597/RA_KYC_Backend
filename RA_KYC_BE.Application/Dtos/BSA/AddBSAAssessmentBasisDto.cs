@@ -1,15 +1,16 @@
-﻿using RA_KYC_BE.Domain.Entities.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace RA_KYC_BE.Domain.Entities
+namespace RA_KYC_BE.Application.Dtos.BSA
 {
-    public class RiskCategories : BaseEntity
+    public class AddBSAAssessmentBasisDto
     {
+        public int Id { get; set; }
         [Required]
         public string RiskCategoryCode { get; set; }
         public string RiskCategoryName { get; set; }
         public string LowRiskQuestion { get; set; }
         public string ModerateRiskQuestion { get; set; }
         public string HighRiskQuestion { get; set; }
+        public bool IsActive { get; set; }
     }
 }
