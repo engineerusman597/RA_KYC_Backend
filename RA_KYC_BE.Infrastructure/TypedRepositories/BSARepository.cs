@@ -1,6 +1,7 @@
 ﻿using ExcelDataReader;
 using Infrastructure.Content.Data;
 using Microsoft.EntityFrameworkCore;
+using RA_KYC_BE.Application.Dtos;
 using RA_KYC_BE.Application.Dtos.BSA;
 using RA_KYC_BE.Application.Interfaces.TypedRepositories;
 using RA_KYC_BE.Domain.Entities;
@@ -17,7 +18,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             _context = context;
         }
 
-        public async Task<List<BSAControls>> GetAllBSAControls() => await _context.BSAControls.ToListAsync();
+        public async Task<List<CategoryCodesDTO>> GetAllCategoryCodes() => await _context.BSAAssessmentBasis.Select(p => new CategoryCodesDTO (){ Code = p.RiskCategoryCode, Name = p.RiskCategoryCode }).ToListAsync();
 
         public async Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel)
         {
@@ -39,7 +40,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                             int count = reader.FieldCount;
                             if (importRiskCategoriesModel.File.FileName == "BSA-AML Control.xlsx")
                             {
-                                List<BSAControls> mitigatingControls = new List<BSAControls>();
+                                List<BSAControls> mitigatingControls = new();
                                 while (reader.Read())
                                 {
                                     if (IsHeaderLoopItrate == false)
@@ -50,14 +51,10 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                         var strong3 = Convert.ToString(reader.GetValue(3)).Trim();
                                         var adequate2 = Convert.ToString(reader.GetValue(4)).Trim();
                                         var weak1 = Convert.ToString(reader.GetValue(5)).Trim();
-                                        var score = Convert.ToString(reader.GetValue(6)).Trim();
-                                        var comments = Convert.ToString(reader.GetValue(7)).Trim();
-                                        var documents = Convert.ToString(reader.GetValue(8)).Trim();
 
                                         if (code == "Code" && controlCode == "Control Code" &&
                                             category == "Category" && strong3 == "Strong (3)" &&
-                                            adequate2 == "Adequate (2)" && weak1 == "Weak (1)" &&
-                                            score == "Score" && comments == "Comments:" && documents == "Documents")
+                                            adequate2 == "Adequate (2)" && weak1 == "Weak (1)")
                                         {
                                             IsHeaderLoopItrate = true;
                                         }
@@ -68,15 +65,12 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                         {
                                             mitigatingControls.Add(new BSAControls
                                             {
-                                                ParentCode = Convert.ToString(reader.GetValue(0)).Trim(),
+                                                Code = Convert.ToString(reader.GetValue(0)).Trim(),
                                                 ControlCode = Convert.ToString(reader.GetValue(1)).Trim(),
                                                 Category = Convert.ToString(reader.GetValue(2)).Trim(),
-                                                Strong3 = Convert.ToString(reader.GetValue(3)),
-                                                Adequate2 = (Convert.ToString(reader.GetValue(4)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(4)).Trim(),
-                                                Weak1 = (Convert.ToString(reader.GetValue(5)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(5)).Trim(),
-                                                Score = Convert.ToDecimal(Convert.ToString(reader.GetValue(6)).Trim() == "_" ? 0.00 : Convert.ToString(reader.GetValue(6)).Trim()),
-                                                Comments = Convert.ToString(reader.GetValue(7)),
-                                                Documents = Convert.ToString(reader.GetValue(8)),
+                                                StrongQuestion = Convert.ToString(reader.GetValue(3)),
+                                                AdequateQuestion = (Convert.ToString(reader.GetValue(4)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(4)).Trim(),
+                                                WeakQuestion = (Convert.ToString(reader.GetValue(5)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(5)).Trim(),
                                                 CreatedOn = DateTimeOffset.UtcNow
                                             });
                                         }
@@ -87,12 +81,19 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                     }
                                 }
 
+                                if (mitigatingControls.Count > 0)
+                                {
+                                    var bsaControlCodes = mitigatingControls.Select(c => c.ControlCode).ToList();
+                                    var bsaControlsToRemove = await _context.BSAControls.Where(c => bsaControlCodes.Contains(c.ControlCode)).ToListAsync();
+                                    _context.RemoveRange(bsaControlsToRemove);
+                                    _context.SaveChanges();
+                                }
                                 _context.BSAControls.AddRange(mitigatingControls);
                                 _context.SaveChanges();
                             }
                             else if (importRiskCategoriesModel.File.FileName == "BSA-AML Assessment Basis.xlsx")
                             {
-                                List<BSAAssessmentBasis> riskCategories = new List<BSAAssessmentBasis>();
+                                List<BSAAssessmentBasis> riskCategories = new();
                                 while (reader.Read())
                                 {
                                     if (IsHeaderLoopItrate == false)
@@ -135,6 +136,13 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                     }
                                 }
 
+                                if (riskCategories.Count > 0)
+                                {
+                                    var riskCategoryCodes = riskCategories.Select(c => c.RiskCategoryCode).ToList();
+                                    var riskCategoriesToRemove = await _context.BSAAssessmentBasis.Where(c => riskCategoryCodes.Contains(c.RiskCategoryCode)).ToListAsync();
+                                    _context.RemoveRange(riskCategoriesToRemove);
+                                    _context.SaveChanges();
+                                }
                                 _context.BSAAssessmentBasis.AddRange(riskCategories);
                                 _context.SaveChanges();
                             }
@@ -178,6 +186,13 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                     }
                                 }
 
+                                if (oFACAssessmentBasis.Count > 0)
+                                {
+                                    var ofacAssessmentBasisCodes = oFACAssessmentBasis.Select(c => c.RiskCategoryCode).ToList();
+                                    var ofacAssessmentBasisToRemove = await _context.OFACAssessmentBasis.Where(c => ofacAssessmentBasisCodes.Contains(c.RiskCategoryCode)).ToListAsync();
+                                    _context.RemoveRange(ofacAssessmentBasisToRemove);
+                                    _context.SaveChanges();
+                                }
                                 await _context.OFACAssessmentBasis.AddRangeAsync(oFACAssessmentBasis);
                                 await _context.SaveChangesAsync();
                             }
@@ -231,6 +246,13 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                     }
                                 }
 
+                                if (oFACControls.Count > 0)
+                                {
+                                    var oFACControlsCodes = oFACControls.Select(c => c.ControlCode).ToList();
+                                    var oFACControlsToRemove = await _context.OFACControl.Where(c => oFACControlsCodes.Contains(c.ControlCode)).ToListAsync();
+                                    _context.RemoveRange(oFACControlsToRemove);
+                                    _context.SaveChanges();
+                                }
                                 await _context.OFACControl.AddRangeAsync(oFACControls);
                                 await _context.SaveChangesAsync();
                             }

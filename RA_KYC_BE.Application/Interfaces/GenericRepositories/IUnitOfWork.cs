@@ -12,6 +12,7 @@ namespace RA_KYC_BE.Application.Interfaces.GenericRepositories
         IBusinessTypesRepository BusinessTypes { get; }
         IEducationLevelRepository EducationLevels { get; }
         IBSARepository BSAs { get; }
+        IBSAControlRepository BSAControls { get; }
         Task<int> Complete();
     }
 }

@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RA_KYC_BE.Application.Dtos.BSA
+namespace RA_KYC_BE.Application.Dtos.OFAC
 {
-    public class BSADto
+    public class OFACDto
     {
-        public BSADto()
+        public OFACDto()
         {
-            MitigatingControls = new List<BSAControlsDto>();
+            ChildrenCategories = new List<OFACControlsDto>();
         }
         public int Id { get; set; }
         [Required]
@@ -15,12 +15,12 @@ namespace RA_KYC_BE.Application.Dtos.BSA
         public string LowRiskQuestion { get; set; }
         public string ModerateRiskQuestion { get; set; }
         public string HighRiskQuestion { get; set; }
-        public string? InherentRisk { get; set; }
-        public double? Score { get; set; }
-        public string? CalculatedRating { get; set; }
+        public string InherentRisk { get; set; }
+        public double Score { get; set; }
+        public string CalculatedRating { get; set; }
         public string RiskCategoryNumber { get; set; }
         public string RowInFFIECAppendix { get; set; }
         public bool IsActive { get; set; }
-        public List<BSAControlsDto> MitigatingControls { get; set; }
+        public List<OFACControlsDto> ChildrenCategories { get; set; }
     }
 }

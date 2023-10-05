@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RA_KYC_BE.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231003183323_InitialCreate")]
+    [Migration("20231004140502_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -89,7 +89,7 @@ namespace RA_KYC_BE.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Adequate2")
+                    b.Property<string>("AdequateQuestion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -97,8 +97,11 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Comments")
+                    b.Property<string>("Code")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comments")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ControlCode")
@@ -112,20 +115,15 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Documents")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("ParentCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Score")
+                    b.Property<decimal?>("Score")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("Strong3")
+                    b.Property<string>("StrongQuestion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -135,7 +133,7 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     b.Property<DateTimeOffset?>("UpdatedOn")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Weak1")
+                    b.Property<string>("WeakQuestion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

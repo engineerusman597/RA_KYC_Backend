@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using RA_KYC_BE.Application.Dtos;
 using RA_KYC_BE.Application.Dtos.BSA;
 using RA_KYC_BE.Application.Interfaces.GenericRepositories;
 using RA_KYC_BE.Domain.Entities;
@@ -51,26 +52,23 @@ namespace RA_KYC_BE.API.Controllers.Content
         public async Task<IActionResult> GetAll()
         {
             var riskCategories = await _unitOfWork.BSAs.GetAll();
-            var mitigatingControls = await _unitOfWork.BSAs.GetAllBSAControls();
+            var mitigatingControls = await _unitOfWork.BSAControls.GetAll();
             var riskCategoriesDtos = _mapper.Map<List<BSADto>>(riskCategories);
             foreach (var riskCategory in riskCategoriesDtos)
             {
                 foreach (var childrenRiskCategory in mitigatingControls)
                 {
-                    if(riskCategory.RiskCategoryCode == childrenRiskCategory.ParentCode)
+                    if(riskCategory.RiskCategoryCode == childrenRiskCategory.Code)
                     {
-                        riskCategory.ChildrenCategories.Add(new BSAControlsDto()
+                        riskCategory.MitigatingControls.Add(new BSAControlsDto()
                         {
                             Id = childrenRiskCategory.Id,
-                            Weak = "Weak (1)",
-                            Adequate = "Adequate (2)",
-                            Strong = "Strong (3)",
-                            AdequateQuestion = childrenRiskCategory.Adequate2,
-                            StrongQuestion = childrenRiskCategory.Strong3,
-                            WeakQuestion = childrenRiskCategory.Weak1,
-                            Code = childrenRiskCategory.ControlCode,
-                            ParentCode = childrenRiskCategory.ParentCode,
-                            Name = childrenRiskCategory.Category,
+                            WeakQuestion = childrenRiskCategory.WeakQuestion,
+                            AdequateQuestion = childrenRiskCategory.AdequateQuestion,
+                            StrongQuestion = childrenRiskCategory.StrongQuestion,
+                            Code = childrenRiskCategory.Code,
+                            ControlCode = childrenRiskCategory.ControlCode,
+                            Category = childrenRiskCategory.Category,
                             Score = Convert.ToDouble(childrenRiskCategory.Score),
                         });
                     }
