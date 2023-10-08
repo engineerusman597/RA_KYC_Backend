@@ -5,7 +5,7 @@ using RA_KYC_BE.Application.Dtos.CustomerDetails;
 using RA_KYC_BE.Application.Dtos.CustomerRiskFactors;
 using RA_KYC_BE.Application.Dtos.CustomerTypes;
 using RA_KYC_BE.Application.Dtos.EducationLevel;
-using RA_KYC_BE.Application.Dtos.RiskCategories;
+using RA_KYC_BE.Application.Dtos.BSA;
 using RA_KYC_BE.Domain.Entities;
 
 namespace RA_KYC_BE.API.AutoMapper
@@ -26,10 +26,12 @@ namespace RA_KYC_BE.API.AutoMapper
             CreateMap<BusinessTypes, BusinessTypesDto>();
             CreateMap<EducationLevelDto, EducationLevel>();
             CreateMap<EducationLevel, EducationLevelDto>();
-            CreateMap<RiskCategoriesDto, RiskCategories>();
-            CreateMap<RiskCategories, RiskCategoriesDto>();
-            CreateMap<AddRiskCategoriesDto, RiskCategories>();
-            CreateMap<RiskCategories, AddRiskCategoriesDto>();
+            CreateMap<BSADto, BSAAssessmentBasis>();
+            CreateMap<BSAAssessmentBasis, BSADto>();
+            CreateMap<AddBSAAssessmentBasisDto, BSAAssessmentBasis>();
+            CreateMap<BSAAssessmentBasis, AddBSAAssessmentBasisDto>();
+            CreateMap<BSAControlsDto, BSAControls>();
+            CreateMap<BSAControls, BSAControlsDto>();
         }
     }
 }

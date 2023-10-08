@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RA_KYC_BE.Domain.Entities
 {
-    public class RiskCategories : BaseEntity
+    public class OFACAssessmentBasis : BaseEntity
     {
         [Required]
         public string RiskCategoryCode { get; set; }

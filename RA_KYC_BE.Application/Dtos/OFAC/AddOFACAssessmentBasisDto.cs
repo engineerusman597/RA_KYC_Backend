@@ -1,13 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RA_KYC_BE.Application.Dtos.RiskCategories
+namespace RA_KYC_BE.Application.Dtos.OFAC
 {
-    public class RiskCategoriesDto
+    public class AddOFACAssessmentBasisDto
     {
-        public RiskCategoriesDto()
-        {
-            ChildrenCategories = new List<ChildrenRiskCategoriesDto>();
-        }
         public int Id { get; set; }
         [Required]
         public string RiskCategoryCode { get; set; }
@@ -15,7 +11,8 @@ namespace RA_KYC_BE.Application.Dtos.RiskCategories
         public string LowRiskQuestion { get; set; }
         public string ModerateRiskQuestion { get; set; }
         public string HighRiskQuestion { get; set; }
+        public string RiskCategoryNumber { get; set; }
+        public string RowInFFIECAppendix { get; set; }
         public bool IsActive { get; set; }
-        public List<ChildrenRiskCategoriesDto> ChildrenCategories { get; set; }
     }
 }
