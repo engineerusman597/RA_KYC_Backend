@@ -20,6 +20,8 @@ namespace Infrastructure.Content.Data
         public DbSet<EducationLevel> EducationLevels { get; set; }
         public DbSet<MaritalStatus> MaritalStatuses { get; set; }
         public DbSet<BSAAssessmentBasis> BSAAssessmentBasis { get; set; }
+        public DbSet<BSAAssessmentBasisWithClient> BSAAssessmentBasisWithClients { get; set; }
+        public DbSet<BSAControlsWithClient> BSAControlsWithClients { get; set; }
         public DbSet<BSAControls> BSAControls { get; set; }
         public DbSet<OFACAssessmentBasis> OFACAssessmentBasis { get; set; }
         public DbSet<OFACControl> OFACControl { get; set; }

@@ -270,6 +270,68 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BSAAssessmentBasisWithClient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RiskCategoryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LowRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModerateRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HighRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RowInFFIECAppendix = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsChecked = table.Column<bool>(type: "bit", nullable: false),
+                    CheckedRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRiskScore = table.Column<int>(type: "int", nullable: false),
+                    MitigatingControl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MitigatingControlScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSAAssessmentBasisWithClient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BSAAssessmentBasisWithClient_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BSAControlsWithClient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ControlCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StrongQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdequateQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeakQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSAControlsWithClient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BSAControlsWithClient_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerDetails",
                 columns: table => new
                 {
@@ -495,6 +557,16 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_BSAAssessmentBasisWithClient_ClientId",
+                table: "BSAAssessmentBasisWithClient",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BSAControlsWithClient_ClientId",
+                table: "BSAControlsWithClient",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CustomerDetails_ClientId",
                 table: "CustomerDetails",
                 column: "ClientId");
@@ -551,7 +623,13 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 name: "BSAAssessmentBasis");
 
             migrationBuilder.DropTable(
+                name: "BSAAssessmentBasisWithClient");
+
+            migrationBuilder.DropTable(
                 name: "BSAControls");
+
+            migrationBuilder.DropTable(
+                name: "BSAControlsWithClient");
 
             migrationBuilder.DropTable(
                 name: "BSARiskMatrices");

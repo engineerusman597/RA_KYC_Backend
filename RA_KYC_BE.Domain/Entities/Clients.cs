@@ -10,6 +10,8 @@ namespace RA_KYC_BE.Domain.Entities
         public Clients()
         {
             CustomerDetails = new HashSet<CustomerDetails>();
+            BSAAssessmentBasisWithClients = new HashSet<BSAAssessmentBasisWithClient>();
+            BSAControlsWithClients = new HashSet<BSAControlsWithClient>();
         }
         [Required]
         public string ClientName { get; set; }
@@ -19,5 +21,7 @@ namespace RA_KYC_BE.Domain.Entities
         [Required]
         public string LastName { get; set; }
         public virtual ICollection<CustomerDetails> CustomerDetails { get; set; }
+        public virtual ICollection<BSAAssessmentBasisWithClient> BSAAssessmentBasisWithClients { get; set; }
+        public virtual ICollection<BSAControlsWithClient> BSAControlsWithClients { get; set; }
     }
 }

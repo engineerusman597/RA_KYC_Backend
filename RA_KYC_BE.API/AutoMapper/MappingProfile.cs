@@ -32,6 +32,10 @@ namespace RA_KYC_BE.API.AutoMapper
             CreateMap<BSAAssessmentBasis, AddBSAAssessmentBasisDto>();
             CreateMap<BSAControlsDto, BSAControls>();
             CreateMap<BSAControls, BSAControlsDto>();
+            CreateMap<BSAAssessmentBasisWithClientDto, BSAAssessmentBasisWithClient>();
+            CreateMap<BSAAssessmentBasisWithClient, BSAAssessmentBasisWithClientDto>();
+            CreateMap<BSAControlsWithClientDto, BSAControlsWithClient>();
+            CreateMap<BSAControlsWithClient, BSAControlsWithClientDto>();
         }
     }
 }
