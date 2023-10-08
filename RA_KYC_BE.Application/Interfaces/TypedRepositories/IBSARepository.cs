@@ -8,6 +8,8 @@ namespace RA_KYC_BE.Application.Interfaces.TypedRepositories
     public interface IBSARepository : IGenericRepository<BSAAssessmentBasis>
     {
         Task<List<CategoryCodesDTO>> GetAllCategoryCodes();
+        Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId);
+        Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient);
         Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel);
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace RA_KYC_BE.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231004140502_InitialCreate")]
+    [Migration("20231008180059_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -81,6 +81,77 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     b.ToTable("BSAAssessmentBasis");
                 });
 
+            modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSAAssessmentBasisWithClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CheckedRisk")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HighRiskQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InherentRisk")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InherentRiskScore")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsChecked")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LowRiskQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MitigatingControl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("MitigatingControlScore")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("ModerateRiskQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ResidualRisk")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RiskCategoryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RiskCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RiskCategoryNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RowInFFIECAppendix")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("BSAAssessmentBasisWithClient");
+                });
+
             modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSAControls", b =>
                 {
                     b.Property<int>("Id")
@@ -140,6 +211,60 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("BSAControls");
+                });
+
+            modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSAControlsWithClient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AdequateQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ControlCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Documents")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsComplete")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal?>("Score")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("StrongQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WeakQuestion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("BSAControlsWithClient");
                 });
 
             modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSARiskMatrix", b =>
@@ -947,6 +1072,28 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     b.ToTable("Identity.UserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSAAssessmentBasisWithClient", b =>
+                {
+                    b.HasOne("RA_KYC_BE.Domain.Entities.Clients", "Client")
+                        .WithMany("BSAAssessmentBasisWithClients")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSAControlsWithClient", b =>
+                {
+                    b.HasOne("RA_KYC_BE.Domain.Entities.Clients", "Client")
+                        .WithMany("BSAControlsWithClients")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
             modelBuilder.Entity("RA_KYC_BE.Domain.Entities.CustomerDetails", b =>
                 {
                     b.HasOne("RA_KYC_BE.Domain.Entities.Clients", "Clients")
@@ -1059,6 +1206,10 @@ namespace RA_KYC_BE.Infrastructure.Migrations
 
             modelBuilder.Entity("RA_KYC_BE.Domain.Entities.Clients", b =>
                 {
+                    b.Navigation("BSAAssessmentBasisWithClients");
+
+                    b.Navigation("BSAControlsWithClients");
+
                     b.Navigation("CustomerDetails");
                 });
 

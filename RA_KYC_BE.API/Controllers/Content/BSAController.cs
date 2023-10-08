@@ -19,6 +19,16 @@ namespace RA_KYC_BE.API.Controllers.Content
             _unitOfWork = unitOfWork;
         }
 
+        [HttpPost("SaveRiskCategoriesWithClientAndResults")]
+        public async Task<IActionResult> SaveRiskCategoriesWithClientAndResults([FromBody] List<BSAAssessmentBasisWithClientDto> bsaAssessmentBasisWithClientDtos)
+        {
+            var mitigatingControlsDtos = bsaAssessmentBasisWithClientDtos.SelectMany(b => b.BSAControlsWithClients).ToList();
+            var mitigatingControls = _mapper.Map<List<BSAControlsWithClient>>(mitigatingControlsDtos);
+            var bsaAssessmentBasisWithClient = _mapper.Map<List<BSAAssessmentBasisWithClient>>(bsaAssessmentBasisWithClientDtos);
+            await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls);
+            return Ok(await _unitOfWork.Complete());
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AddBSAAssessmentBasisDto riskCategoriesDto)
         {
@@ -70,6 +80,38 @@ namespace RA_KYC_BE.API.Controllers.Content
                             ControlCode = childrenRiskCategory.ControlCode,
                             Category = childrenRiskCategory.Category,
                             Score = Convert.ToDouble(childrenRiskCategory.Score),
+                        });
+                    }
+                }
+            }
+            return Ok(riskCategoriesDtos);
+        }
+
+        [HttpGet("GetAllByClientId/{ClientId}")]
+        public async Task<IActionResult> GetAllByClientId(int ClientId)
+        {
+            var riskCategories = await _unitOfWork.BSAs.GetAllBSARABasisByClientId(ClientId);
+            var mitigatingControls = await _unitOfWork.BSAControls.GetAllBSAControlsByClientId(ClientId);
+            var riskCategoriesDtos = _mapper.Map<List<BSAAssessmentBasisWithClientDto>>(riskCategories);
+            foreach (var riskCategory in riskCategoriesDtos)
+            {
+                foreach (var childrenRiskCategory in mitigatingControls)
+                {
+                    if (riskCategory.RiskCategoryCode == childrenRiskCategory.Code)
+                    {
+                        riskCategory.BSAControlsWithClients.Add(new BSAControlsWithClientDto()
+                        {
+                            Id = childrenRiskCategory.Id,
+                            ClientId = childrenRiskCategory.ClientId,
+                            WeakQuestion = childrenRiskCategory.WeakQuestion,
+                            AdequateQuestion = childrenRiskCategory.AdequateQuestion,
+                            StrongQuestion = childrenRiskCategory.StrongQuestion,
+                            Code = childrenRiskCategory.Code,
+                            ControlCode = childrenRiskCategory.ControlCode,
+                            Category = childrenRiskCategory.Category,
+                            Score = childrenRiskCategory.Score,
+                            Comments = childrenRiskCategory.Comments,
+                            Documents = childrenRiskCategory.Documents
                         });
                     }
                 }

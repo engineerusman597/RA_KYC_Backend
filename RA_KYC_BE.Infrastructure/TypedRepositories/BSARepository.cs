@@ -19,6 +19,10 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
         }
 
         public async Task<List<CategoryCodesDTO>> GetAllCategoryCodes() => await _context.BSAAssessmentBasis.Select(p => new CategoryCodesDTO (){ Code = p.RiskCategoryCode, Name = p.RiskCategoryCode }).ToListAsync();
+        public async Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId)
+        {
+            return await _context.BSAAssessmentBasisWithClients.ToListAsync();
+        }
 
         public async Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel)
         {
@@ -262,6 +266,24 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             }
             catch (Exception ex)
             {
+                throw;
+            }
+        }
+
+        public async Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient)
+        {
+            try
+            {
+                
+                _context.BSAControlsWithClients.RemoveRange(bsaControlsWithClient);
+                _context.BSAAssessmentBasisWithClients.RemoveRange(bsaAssessmentBasisWithClient);
+                await _context.BSAAssessmentBasisWithClients.AddRangeAsync(bsaAssessmentBasisWithClient);
+                await _context.BSAControlsWithClients.AddRangeAsync(bsaControlsWithClient);
+                return 1;
+            }
+            catch (Exception)
+            {
+
                 throw;
             }
         }
