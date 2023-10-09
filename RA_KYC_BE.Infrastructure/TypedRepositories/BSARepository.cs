@@ -270,18 +270,25 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             }
         }
 
-        public async Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient)
+        public async Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient, bool isMain)
         {
             try
             {
-                
-                _context.BSAControlsWithClients.RemoveRange(bsaControlsWithClient);
-                _context.BSAAssessmentBasisWithClients.RemoveRange(bsaAssessmentBasisWithClient);
+                if (!isMain)
+                {
+                    _context.BSAControlsWithClients.RemoveRange(bsaControlsWithClient);
+                    _context.BSAAssessmentBasisWithClients.RemoveRange(bsaAssessmentBasisWithClient);
+                    await _context.SaveChangesAsync();
+                }
+
+                bsaAssessmentBasisWithClient.ForEach((x)=>x.Id=0);
+                var clientId = bsaAssessmentBasisWithClient.Select(x => x.ClientId).FirstOrDefault();
+                bsaControlsWithClient.ForEach((x) => { x.Id = 0;x.ClientId = clientId; });
                 await _context.BSAAssessmentBasisWithClients.AddRangeAsync(bsaAssessmentBasisWithClient);
                 await _context.BSAControlsWithClients.AddRangeAsync(bsaControlsWithClient);
                 return 1;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;

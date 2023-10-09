@@ -9,7 +9,7 @@ namespace RA_KYC_BE.Application.Interfaces.TypedRepositories
     {
         Task<List<CategoryCodesDTO>> GetAllCategoryCodes();
         Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId);
-        Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient);
+        Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient,bool isMain);
         Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel);
     }
 }

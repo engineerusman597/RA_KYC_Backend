@@ -4,7 +4,7 @@
     {
         public BSAAssessmentBasisWithClientDto()
         {
-            BSAControlsWithClients = new HashSet<BSAControlsWithClientDto>();
+            MitigatingControls = new HashSet<BSAControlsWithClientDto>();
         }
         public int Id { get; set; }
         public string RiskCategoryCode { get; set; }
@@ -23,6 +23,6 @@
         public decimal MitigatingControlScore { get; set; }
         public bool IsComplete { get; set; }
         public int ClientId { get; set; }
-        public ICollection<BSAControlsWithClientDto> BSAControlsWithClients { get; set; }
+        public ICollection<BSAControlsWithClientDto> MitigatingControls { get; set; }
     }
 }

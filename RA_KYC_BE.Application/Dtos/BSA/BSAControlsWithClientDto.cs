@@ -1,4 +1,6 @@
-﻿namespace RA_KYC_BE.Application.Dtos.BSA
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RA_KYC_BE.Application.Dtos.BSA
 {
     public class BSAControlsWithClientDto
     {
@@ -13,5 +15,7 @@
         public string? Comments { get; set; }
         public string? Documents { get; set; }
         public int ClientId { get; set; }
+        [NotMapped]
+        public bool IsComplete { get; set; }
     }
 }

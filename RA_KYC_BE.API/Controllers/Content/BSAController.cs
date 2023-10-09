@@ -20,13 +20,27 @@ namespace RA_KYC_BE.API.Controllers.Content
         }
 
         [HttpPost("SaveRiskCategoriesWithClientAndResults")]
-        public async Task<IActionResult> SaveRiskCategoriesWithClientAndResults([FromBody] List<BSAAssessmentBasisWithClientDto> bsaAssessmentBasisWithClientDtos)
+        public async Task<IActionResult> SaveRiskCategoriesWithClientAndResults([FromBody] BSAssessmentCheckedDto<List<BSAAssessmentBasisWithClientDto>> model )
         {
-            var mitigatingControlsDtos = bsaAssessmentBasisWithClientDtos.SelectMany(b => b.BSAControlsWithClients).ToList();
-            var mitigatingControls = _mapper.Map<List<BSAControlsWithClient>>(mitigatingControlsDtos);
-            var bsaAssessmentBasisWithClient = _mapper.Map<List<BSAAssessmentBasisWithClient>>(bsaAssessmentBasisWithClientDtos);
-            await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls);
-            return Ok(await _unitOfWork.Complete());
+            try
+            {
+                var mitigatingControls = new List<BSAControlsWithClient>();
+                var bsaAssessmentBasisWithClient = new List<BSAAssessmentBasisWithClient>();
+                foreach (var bsaItems in model.Options)
+                {
+                    bsaAssessmentBasisWithClient.Add(_mapper.Map<BSAAssessmentBasisWithClient>(bsaItems));
+                    mitigatingControls.AddRange(_mapper.Map<List<BSAControlsWithClient>>(bsaItems.MitigatingControls));
+
+                }
+                await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls,model.IsMainTable);
+                return Ok(await _unitOfWork.Complete());
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
         }
 
         [HttpPost]
@@ -84,7 +98,11 @@ namespace RA_KYC_BE.API.Controllers.Content
                     }
                 }
             }
-            return Ok(riskCategoriesDtos);
+            return Ok(new BSAssessmentCheckedDto<List<BSADto>>()
+            {
+                Options = riskCategoriesDtos,
+                IsMainTable = true
+            });
         }
 
         [HttpGet("GetAllByClientId/{ClientId}")]
@@ -99,7 +117,7 @@ namespace RA_KYC_BE.API.Controllers.Content
                 {
                     if (riskCategory.RiskCategoryCode == childrenRiskCategory.Code)
                     {
-                        riskCategory.BSAControlsWithClients.Add(new BSAControlsWithClientDto()
+                        riskCategory.MitigatingControls.Add(new BSAControlsWithClientDto()
                         {
                             Id = childrenRiskCategory.Id,
                             ClientId = childrenRiskCategory.ClientId,
@@ -116,7 +134,11 @@ namespace RA_KYC_BE.API.Controllers.Content
                     }
                 }
             }
-            return Ok(riskCategoriesDtos);
+            return Ok(new BSAssessmentCheckedDto<List<BSAAssessmentBasisWithClientDto>>()
+            {
+                Options = riskCategoriesDtos,
+                IsMainTable = false
+            });
         }
 
         [HttpPut()]
