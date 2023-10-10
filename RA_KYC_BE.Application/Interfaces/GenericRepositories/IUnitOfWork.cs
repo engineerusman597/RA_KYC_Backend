@@ -13,6 +13,7 @@ namespace RA_KYC_BE.Application.Interfaces.GenericRepositories
         IEducationLevelRepository EducationLevels { get; }
         IBSARepository BSAs { get; }
         IBSAControlRepository BSAControls { get; }
+         IBSARiskMatrixRepository BSARiskMatrixs { get;}
         Task<int> Complete();
     }
 }

@@ -23,6 +23,7 @@ namespace RA_KYC_BE.Application.Dtos.BSA
         public bool IsChecked { get; set; } = false;
         public string CheckedRisk { get; set; } = "";
         public string ResidualRisk { get; set; } = "";
+        public int ResidualRiskScore { get; set; } = 0;
         public int InherentRiskScore { get; set; } = 0;
         public string MitigatingControl { get; set; } = "";
         public decimal MitigatingControlScore { get; set; } = 0;

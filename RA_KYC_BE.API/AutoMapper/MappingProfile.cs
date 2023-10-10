@@ -7,6 +7,7 @@ using RA_KYC_BE.Application.Dtos.CustomerTypes;
 using RA_KYC_BE.Application.Dtos.EducationLevel;
 using RA_KYC_BE.Application.Dtos.BSA;
 using RA_KYC_BE.Domain.Entities;
+using RA_KYC_BE.Application.Dtos.BSARiskMatrix;
 
 namespace RA_KYC_BE.API.AutoMapper
 {
@@ -36,6 +37,8 @@ namespace RA_KYC_BE.API.AutoMapper
             CreateMap<BSAAssessmentBasisWithClient, BSAAssessmentBasisWithClientDto>();
             CreateMap<BSAControlsWithClientDto, BSAControlsWithClient>();
             CreateMap<BSAControlsWithClient, BSAControlsWithClientDto>();
+            CreateMap<GetBSARiskMatrixDto, BSARiskMatrix>();
+            CreateMap<BSARiskMatrix, GetBSARiskMatrixDto>();
         }
     }
 }

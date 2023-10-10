@@ -26,12 +26,15 @@ namespace RA_KYC_BE.API.Controllers.Content
             {
                 var mitigatingControls = new List<BSAControlsWithClient>();
                 var bsaAssessmentBasisWithClient = new List<BSAAssessmentBasisWithClient>();
+               var riskMatrix= _mapper.Map<List<BSARiskMatrix>>(model.BSARiskMatrix);
+                riskMatrix.ForEach((x) => x.Id = 0);
                 foreach (var bsaItems in model.Options)
                 {
                     bsaAssessmentBasisWithClient.Add(_mapper.Map<BSAAssessmentBasisWithClient>(bsaItems));
                     mitigatingControls.AddRange(_mapper.Map<List<BSAControlsWithClient>>(bsaItems.MitigatingControls));
                 }
                 await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls,model.IsMainTable);
+                await _unitOfWork.BSARiskMatrixs.AddRange(riskMatrix);
                 return Ok(await _unitOfWork.Complete());
             }
             catch (Exception ex)

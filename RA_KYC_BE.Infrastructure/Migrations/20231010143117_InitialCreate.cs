@@ -62,30 +62,6 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BSARiskMatrices",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RowInFFIECAppendix = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MitigatingControls = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    CreatedBy = table.Column<int>(type: "int", nullable: false),
-                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BSARiskMatrices", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BusinessTypes",
                 columns: table => new
                 {
@@ -332,6 +308,37 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BSARiskMatrices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RowInFFIECAppendix = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MitigatingControls = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BSARiskMatrices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BSARiskMatrices_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CustomerDetails",
                 columns: table => new
                 {
@@ -564,6 +571,11 @@ namespace RA_KYC_BE.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_BSAControlsWithClient_ClientId",
                 table: "BSAControlsWithClient",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BSARiskMatrices_ClientId",
+                table: "BSARiskMatrices",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(

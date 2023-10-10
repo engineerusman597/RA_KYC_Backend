@@ -21,6 +21,7 @@ namespace RA_KYC_BE.Infrastructure.GenericRepositories
             EducationLevels = new EducationLevelRepository(_context);
             BSAs = new BSARepository(_context);
             BSAControls = new BSAControlRepository(_context);
+            BSARiskMatrixs = new BSARiskMatrixRepository(_context);
         }
         public ICustomerDetailsRepository CustomerDetails { get; private set; }
         public ICustomerRiskFactorsRepository CustomerRiskFactors { get; private set; }
@@ -31,6 +32,7 @@ namespace RA_KYC_BE.Infrastructure.GenericRepositories
         public IEducationLevelRepository EducationLevels { get; private set; }
         public IBSARepository BSAs { get; private set; }
         public IBSAControlRepository BSAControls { get; private set; }
+        public IBSARiskMatrixRepository BSARiskMatrixs { get; private set; }
         public async Task<int> Complete() => await _context.SaveChangesAsync();
         public void Dispose() => _context.Dispose();
     }

@@ -17,6 +17,7 @@
         public bool IsChecked { get; set; }
         public string CheckedRisk { get; set; }
         public string ResidualRisk { get; set; }
+        public int ResidualRiskScore { get; set; }
         public string InherentRisk { get; set; }
         public int InherentRiskScore { get; set; }
         public string MitigatingControl { get; set; }

@@ -280,6 +280,9 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Code")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -316,6 +319,8 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("BSARiskMatrices");
                 });
@@ -1084,6 +1089,17 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 {
                     b.HasOne("RA_KYC_BE.Domain.Entities.Clients", "Client")
                         .WithMany("BSAControlsWithClients")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("RA_KYC_BE.Domain.Entities.BSARiskMatrix", b =>
+                {
+                    b.HasOne("RA_KYC_BE.Domain.Entities.Clients", "Client")
+                        .WithMany()
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
