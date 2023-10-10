@@ -19,9 +19,15 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
         }
 
         public async Task<List<CategoryCodesDTO>> GetAllCategoryCodes() => await _context.BSAAssessmentBasis.Select(p => new CategoryCodesDTO (){ Code = p.RiskCategoryCode, Name = p.RiskCategoryCode }).ToListAsync();
+
         public async Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId)
         {
             return await _context.BSAAssessmentBasisWithClients.ToListAsync();
+        }
+
+        public async Task<List<BSARiskMatrix>> GetMatricesByClientId(int clientId)
+        {
+            return await _context.BSARiskMatrices.Where(m=>m.ClientId == clientId).ToListAsync();
         }
 
         public async Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel)

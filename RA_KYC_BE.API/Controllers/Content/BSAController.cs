@@ -30,7 +30,6 @@ namespace RA_KYC_BE.API.Controllers.Content
                 {
                     bsaAssessmentBasisWithClient.Add(_mapper.Map<BSAAssessmentBasisWithClient>(bsaItems));
                     mitigatingControls.AddRange(_mapper.Map<List<BSAControlsWithClient>>(bsaItems.MitigatingControls));
-
                 }
                 await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls,model.IsMainTable);
                 return Ok(await _unitOfWork.Complete());
@@ -140,6 +139,9 @@ namespace RA_KYC_BE.API.Controllers.Content
                 IsMainTable = false
             });
         }
+
+        [HttpGet("GetMatricesByClientId/{ClientId}")]
+        public async Task<IActionResult> GetMatricesByClientId(int ClientId) => Ok(await _unitOfWork.BSAs.GetMatricesByClientId(ClientId));
 
         [HttpPut()]
         public async Task<IActionResult> Put([FromBody] BSADto riskCategoriesDto)
