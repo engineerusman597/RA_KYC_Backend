@@ -264,6 +264,7 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     InherentRiskScore = table.Column<int>(type: "int", nullable: false),
                     MitigatingControl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
                     MitigatingControlScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ClientId = table.Column<int>(type: "int", nullable: false)
                 },

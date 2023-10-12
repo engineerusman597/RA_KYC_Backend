@@ -24,6 +24,7 @@ namespace RA_KYC_BE.Domain.Entities
         public string InherentRisk { get; set; }
         public int InherentRiskScore { get; set; }
         public string MitigatingControl { get; set; }
+        public bool IsComplete { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal MitigatingControlScore { get; set; }
         [ForeignKey("Client")]

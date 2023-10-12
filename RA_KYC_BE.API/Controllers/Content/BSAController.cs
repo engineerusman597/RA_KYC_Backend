@@ -20,21 +20,33 @@ namespace RA_KYC_BE.API.Controllers.Content
         }
 
         [HttpPost("SaveRiskCategoriesWithClientAndResults")]
-        public async Task<IActionResult> SaveRiskCategoriesWithClientAndResults([FromBody] BSAssessmentCheckedDto<List<BSAAssessmentBasisWithClientDto>> model )
+        public async Task<IActionResult> SaveRiskCategoriesWithClientAndResults([FromBody] BSAssessmentCheckedDto<List<BSAAssessmentBasisWithClientDto>> model)
         {
             try
             {
                 var mitigatingControls = new List<BSAControlsWithClient>();
                 var bsaAssessmentBasisWithClient = new List<BSAAssessmentBasisWithClient>();
-               var riskMatrix= _mapper.Map<List<BSARiskMatrix>>(model.BSARiskMatrix);
-                riskMatrix.ForEach((x) => x.Id = 0);
+                var riskMatrices = new List<BSARiskMatrix>();
                 foreach (var bsaItems in model.Options)
                 {
+                    if (bsaItems.IsChecked)
+                    {
+                        riskMatrices.Add(new BSARiskMatrix()
+                        {
+                            ClientId = bsaItems.ClientId,
+                            Code = bsaItems.RiskCategoryCode,
+                            RowInFFIECAppendix = bsaItems.RowInFFIECAppendix,
+                            CategoryNumber = bsaItems.RiskCategoryNumber,
+                            Category = bsaItems.RiskCategoryName,
+                            InherentRisk = bsaItems.InherentRisk + "\t" + bsaItems.InherentRiskScore,
+                            MitigatingControls = bsaItems.MitigatingControl + "\t" + bsaItems.MitigatingControlScore,
+                            ResidualRisk = bsaItems.ResidualRisk + "\t" + bsaItems.ResidualRiskScore
+                        });
+                    }
                     bsaAssessmentBasisWithClient.Add(_mapper.Map<BSAAssessmentBasisWithClient>(bsaItems));
                     mitigatingControls.AddRange(_mapper.Map<List<BSAControlsWithClient>>(bsaItems.MitigatingControls));
                 }
-                await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls,model.IsMainTable);
-                await _unitOfWork.BSARiskMatrixs.AddRange(riskMatrix);
+                await _unitOfWork.BSAs.SaveRiskCategoriesWithClientAndResults(bsaAssessmentBasisWithClient, mitigatingControls, riskMatrices, model.IsMainTable);
                 return Ok(await _unitOfWork.Complete());
             }
             catch (Exception ex)
@@ -84,7 +96,7 @@ namespace RA_KYC_BE.API.Controllers.Content
             {
                 foreach (var childrenRiskCategory in mitigatingControls)
                 {
-                    if(riskCategory.RiskCategoryCode == childrenRiskCategory.Code)
+                    if (riskCategory.RiskCategoryCode == childrenRiskCategory.Code)
                     {
                         riskCategory.MitigatingControls.Add(new BSAControlsDto()
                         {
@@ -96,6 +108,8 @@ namespace RA_KYC_BE.API.Controllers.Content
                             ControlCode = childrenRiskCategory.ControlCode,
                             Category = childrenRiskCategory.Category,
                             Score = Convert.ToDouble(childrenRiskCategory.Score),
+                            Comments = childrenRiskCategory.Comments,
+                            Documents = childrenRiskCategory.Documents,
                         });
                     }
                 }

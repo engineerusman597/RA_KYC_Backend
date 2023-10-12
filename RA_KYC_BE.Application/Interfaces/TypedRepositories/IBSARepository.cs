@@ -10,7 +10,7 @@ namespace RA_KYC_BE.Application.Interfaces.TypedRepositories
         Task<List<CategoryCodesDTO>> GetAllCategoryCodes();
         Task<List<BSARiskMatrix>> GetMatricesByClientId(int clientId);
         Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId);
-        Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient,bool isMain);
+        Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient, List<BSARiskMatrix> bSARiskMatrices, bool isMain);
         Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel);
     }
 }

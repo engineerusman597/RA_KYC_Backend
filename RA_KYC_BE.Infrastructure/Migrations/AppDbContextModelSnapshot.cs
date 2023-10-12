@@ -107,6 +107,9 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     b.Property<bool>("IsChecked")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsComplete")
+                        .HasColumnType("bit");
+
                     b.Property<string>("LowRiskQuestion")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

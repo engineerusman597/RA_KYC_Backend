@@ -18,7 +18,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             _context = context;
         }
 
-        public async Task<List<CategoryCodesDTO>> GetAllCategoryCodes() => await _context.BSAAssessmentBasis.Select(p => new CategoryCodesDTO (){ Code = p.RiskCategoryCode, Name = p.RiskCategoryCode }).ToListAsync();
+        public async Task<List<CategoryCodesDTO>> GetAllCategoryCodes() => await _context.BSAAssessmentBasis.Select(p => new CategoryCodesDTO() { Code = p.RiskCategoryCode, Name = p.RiskCategoryCode }).ToListAsync();
 
         public async Task<List<BSAAssessmentBasisWithClient>> GetAllBSARABasisByClientId(int clientId)
         {
@@ -27,7 +27,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
 
         public async Task<List<BSARiskMatrix>> GetMatricesByClientId(int clientId)
         {
-            return await _context.BSARiskMatrices.Where(m=>m.ClientId == clientId).ToListAsync();
+            return await _context.BSARiskMatrices.Where(m => clientId > 0 ? m.ClientId == clientId : true).ToListAsync();
         }
 
         public async Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel)
@@ -118,7 +118,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
 
                                         if (code == "Code" && riskCategory == "Risk Category" && lowRisk == "Low Risk"
                                             && moderateRisk == "Moderate Risk" && highRisk == "High Risk"
-                                            && RiskCategoryNumber == "Risk Category #" && RowInFFIECAppendix== "Row in FFIEC Appendix J")
+                                            && RiskCategoryNumber == "Risk Category #" && RowInFFIECAppendix == "Row in FFIEC Appendix J")
                                         {
                                             IsHeaderLoopItrate = true;
                                         }
@@ -276,20 +276,24 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             }
         }
 
-        public async Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient, bool isMain)
+        public async Task<object> SaveRiskCategoriesWithClientAndResults(List<BSAAssessmentBasisWithClient> bsaAssessmentBasisWithClient, List<BSAControlsWithClient> bsaControlsWithClient, List<BSARiskMatrix> bSARiskMatrices, bool isMain)
         {
             try
             {
+                var clientId = bsaAssessmentBasisWithClient.Select(x => x.ClientId).FirstOrDefault();
+                var riskMatrices = await _context.BSARiskMatrices.Where(m => m.ClientId == clientId).ToListAsync();
+                if (riskMatrices != null && riskMatrices.Count > 0)
+                    _context.BSARiskMatrices.RemoveRange(riskMatrices);
                 if (!isMain)
                 {
                     _context.BSAControlsWithClients.RemoveRange(bsaControlsWithClient);
                     _context.BSAAssessmentBasisWithClients.RemoveRange(bsaAssessmentBasisWithClient);
-                    await _context.SaveChangesAsync();
                 }
+                await _context.SaveChangesAsync();
 
-                bsaAssessmentBasisWithClient.ForEach((x)=>x.Id=0);
-                var clientId = bsaAssessmentBasisWithClient.Select(x => x.ClientId).FirstOrDefault();
-                bsaControlsWithClient.ForEach((x) => { x.Id = 0;x.ClientId = clientId; });
+                bsaAssessmentBasisWithClient.ForEach((x) => x.Id = 0);
+                bsaControlsWithClient.ForEach((x) => { x.Id = 0; x.ClientId = clientId; });
+                await _context.BSARiskMatrices.AddRangeAsync(bSARiskMatrices);
                 await _context.BSAAssessmentBasisWithClients.AddRangeAsync(bsaAssessmentBasisWithClient);
                 await _context.BSAControlsWithClients.AddRangeAsync(bsaControlsWithClient);
                 return 1;
