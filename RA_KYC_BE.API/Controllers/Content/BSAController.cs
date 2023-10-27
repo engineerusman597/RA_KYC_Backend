@@ -1,11 +1,15 @@
-﻿using Aspose.Words;
+﻿
 using AutoMapper;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using RA_KYC_BE.Application.Dtos;
 using RA_KYC_BE.Application.Dtos.BSA;
 using RA_KYC_BE.Application.Interfaces.GenericRepositories;
 using RA_KYC_BE.Application.Utils;
 using RA_KYC_BE.Domain.Entities;
+using Spire.Doc;
+using Spire.Doc.Documents;
 using System.Data;
 using System.Reflection;
 using Xceed.Words.NET;
@@ -177,7 +181,8 @@ namespace RA_KYC_BE.API.Controllers.Content
                     Directory.CreateDirectory(docsfolder);
                 }
                 string templatePath = Path.Combine(docsfolder, "2920 Wall BSA-RA.docx");
-                var bsaTemplate = new Document(templatePath);
+                Document doc = new Document();
+                doc.LoadFromFile(templatePath);
                 var bsaRiskMatrices = await _unitOfWork.BSAs.GetMatricesByClientId(ClientId);
                 var client = bsaRiskMatrices[0].Client;
                 var clientInfo = new
@@ -198,16 +203,72 @@ namespace RA_KYC_BE.API.Controllers.Content
                         ResidualRisk = r.ResidualRisk,
                         RowInFFIECAppendix = r.RowInFFIECAppendix,
                     }));
+                doc.Replace("«CLIENTINFO»", clientInfo.CLIENTINFO, true, true);
+                doc.Replace("«PRINTDATE»", clientInfo.PrintDate, true, true);
+                //bsaTemplate.MailMerge.Execute(new string[] { "CLIENTINFO", "PrintDate" },
+                //                  new object[] { clientInfo.CLIENTINFO, clientInfo.PrintDate });
+                // Find the table in the document
 
+                // Create a section and add a table to it
+                //Section section = doc.AddSection();
+                //Table table = section.AddTable(true);
+                //table.ResetCells(9, 5); // Adjust rows and columns as needed
 
-                bsaTemplate.MailMerge.Execute(new string[] { "CLIENTINFO", "PrintDate" },
-                                  new object[] { clientInfo.CLIENTINFO, clientInfo.PrintDate });
-                // Execute the mail merge
-                var d = Utils.ToDataTable(data);
-                bsaTemplate.MailMerge.ExecuteWithRegions(d);
+                //// Set the table data (example data)
+                //string[] headers = { "Date", "Description", "Country", "On Hands", "On Order" };
+                ////string[][] datatable = data;
 
+                //// Populate the table
+                //TableRow headerRow = table.Rows[0];
+                //for (int i = 0; i < headers.Length; i++)
+                //{
+                //    Paragraph paragraph = headerRow.Cells[i].AddParagraph();
+                //    paragraph.AppendText(headers[i]);
+                //}
+
+                //for (int row = 0; row < data.Count; row++)
+                //{
+                //    TableRow dataRow = table.Rows[row + 1];
+                //    for (int col = 0; col < 7; col++)
+                //    {
+                //        Paragraph paragraph = dataRow.Cells[col].AddParagraph();
+                //        paragraph.AppendText(data[row][col]);
+                //    }
+                //}
+
+                //// Find and replace the variable in the document with the table
+                //string variableToReplace = "YourVariable"; // Replace with your actual variable
+                //doc.Replace(variableToReplace, table, true, true);
+                //Table table = (Table)doc.Sections[0].Tables[0];
+                //// Iterate over the data and insert it into the table
+                //// Find the row with placeholders (assumed to be in the first row of the table)
+                //TableRow placeholderRow = table.Rows[0];
+
+                //// Clone the placeholders row for each record
+                //for (int i = 1; i < data.Count; i++)
+                //{
+                //    TableRow newRow = placeholderRow.Clone();
+                //    table.Rows.Insert(i, newRow);
+                //}
+
+                //// Replace the placeholders with dynamic data
+                //for (int i = 0; i < data.Count; i++)
+                //{
+                //    TableRow currentRow = table.Rows[i];
+                //    currentRow.Cells[0].Paragraphs[0].AppendText(data[i].Code);
+                //    currentRow.Cells[1].AddParagraph().AppendText(data[i].RowInFFIECAppendix);
+                //    currentRow.Cells[2].AddParagraph().AppendText(data[i].CategoryNumber.ToString());
+                //    currentRow.Cells[3].AddParagraph().AppendText(data[i].Category);
+                //    currentRow.Cells[4].AddParagraph().AppendText(data[i].InherentRisk);
+                //    currentRow.Cells[5].AddParagraph().AppendText(data[i].MitigatingControls);
+                //    currentRow.Cells[6].AddParagraph().AppendText(data[i].ResidualRisk);
+                //}
+
+                //// Remove the original placeholders row
+                //table.Rows.Remove(placeholderRow);
                 var stream = new MemoryStream();
-                bsaTemplate.Save(stream, SaveFormat.Pdf);
+                //bsaTemplate.Save(stream, SaveFormat.Pdf);
+                doc.SaveToFile(templatePath+DateTime.Now.ToString("dd-MM-yyyy"), FileFormat.Doc);
                 stream.Position = 0;
 
                 return File(stream, "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "2920WallBSA-RA.pdf");
