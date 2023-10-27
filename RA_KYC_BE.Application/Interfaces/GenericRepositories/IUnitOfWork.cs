@@ -14,6 +14,9 @@ namespace RA_KYC_BE.Application.Interfaces.GenericRepositories
         IBSARepository BSAs { get; }
         IBSAControlRepository BSAControls { get; }
          IBSARiskMatrixRepository BSARiskMatrixs { get;}
+        IOFACRepository OFACs { get; }
+        IOFACControlRepository OFACControls { get; }
+        IOFACRiskMatrixRepository OFACRiskMatrixs { get; }
         Task<int> Complete();
     }
 }

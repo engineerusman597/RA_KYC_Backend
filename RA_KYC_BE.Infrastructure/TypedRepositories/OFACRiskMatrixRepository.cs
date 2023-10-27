@@ -5,11 +5,11 @@ using RA_KYC_BE.Infrastructure.GenericRepositories;
 
 namespace RA_KYC_BE.Infrastructure.TypedRepositories
 {
-    public class BSARiskMatrixRepository : GenericRepository<BSARiskMatrix>, IBSARiskMatrixRepository
+    public class OFACRiskMatrixRepository : GenericRepository<OFACRiskMatrix>, IOFACRiskMatrixRepository
     {
         private readonly AppDbContext _context;
 
-        public BSARiskMatrixRepository(AppDbContext context) : base(context)
+        public OFACRiskMatrixRepository(AppDbContext context) : base(context)
         {
             _context = context;
         }

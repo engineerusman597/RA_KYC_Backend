@@ -1,10 +1,14 @@
-﻿using RA_KYC_BE.Domain.Entities.Common;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RA_KYC_BE.Domain.Entities
 {
-    public class OFACControl : BaseEntity
+    [Table("OFACControlsWithClient")]
+    public class OFACControlsWithClient
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
         public string Code { get; set; }
         public string Category { get; set; }
         public string ControlCode { get; set; }
@@ -15,5 +19,9 @@ namespace RA_KYC_BE.Domain.Entities
         public decimal? Score { get; set; }
         public string? Comments { get; set; }
         public string? Documents { get; set; }
+        public bool IsComplete { get; set; }
+        [ForeignKey("Client")]
+        public int ClientId { get; set; }
+        public virtual Clients Client { get; set; }
     }
 }

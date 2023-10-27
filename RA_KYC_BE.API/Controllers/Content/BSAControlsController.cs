@@ -48,7 +48,7 @@ namespace RA_KYC_BE.API.Controllers.Content
             return Ok(bsaControlsDto);
         }
 
-        [HttpGet("GetAllCategoryCodes")]
+        [HttpGet("GetAllBSACategoryCodes")]
         public async Task<IActionResult> GetAllCategoryCodes()
         {
             return Ok(await _unitOfWork.BSAs.GetAllCategoryCodes());

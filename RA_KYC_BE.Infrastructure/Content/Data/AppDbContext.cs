@@ -22,10 +22,14 @@ namespace Infrastructure.Content.Data
         public DbSet<BSAAssessmentBasis> BSAAssessmentBasis { get; set; }
         public DbSet<BSAAssessmentBasisWithClient> BSAAssessmentBasisWithClients { get; set; }
         public DbSet<BSAControlsWithClient> BSAControlsWithClients { get; set; }
+        public DbSet<BSARiskMatrix> BSARiskMatrices { get; set; }
         public DbSet<BSAControls> BSAControls { get; set; }
         public DbSet<OFACAssessmentBasis> OFACAssessmentBasis { get; set; }
         public DbSet<OFACControl> OFACControl { get; set; }
-        public DbSet<BSARiskMatrix> BSARiskMatrices { get; set; }
+        public DbSet<OFACRiskMatrix> OFACRiskMatrices { get; set; }
+        public DbSet<OFACControlsWithClient> OFACControlsWithClients { get; set; }
+        public DbSet<OFACAssessmentBasisWithClient> OFACAssessmentBasisWithClients { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

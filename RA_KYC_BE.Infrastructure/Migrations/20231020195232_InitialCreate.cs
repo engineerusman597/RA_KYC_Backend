@@ -225,15 +225,15 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ParentCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ControlCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Strong3 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Adequate2 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Weak1 = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StrongQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdequateQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeakQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
                     CreatedBy = table.Column<int>(type: "int", nullable: false),
@@ -382,6 +382,96 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                     table.PrimaryKey("PK_CustomerDetails", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CustomerDetails_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OFACAssessmentBasisWithClient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RiskCategoryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RiskCategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LowRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ModerateRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HighRiskQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsChecked = table.Column<bool>(type: "bit", nullable: false),
+                    CheckedRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRiskScore = table.Column<int>(type: "int", nullable: false),
+                    MitigatingControl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
+                    MitigatingControlScore = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OFACAssessmentBasisWithClient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OFACAssessmentBasisWithClient_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OFACControlsWithClient",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ControlCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StrongQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AdequateQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WeakQuestion = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Score = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Documents = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsComplete = table.Column<bool>(type: "bit", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OFACControlsWithClient", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OFACControlsWithClient_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OFACRiskMatrices",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Category = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InherentRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MitigatingControls = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResidualRisk = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClientId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    UpdatedOn = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    CreatedBy = table.Column<int>(type: "int", nullable: false),
+                    UpdatedBy = table.Column<int>(type: "int", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OFACRiskMatrices", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_OFACRiskMatrices_Clients_ClientId",
                         column: x => x.ClientId,
                         principalTable: "Clients",
                         principalColumn: "Id",
@@ -627,6 +717,21 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 name: "IX_Identity.UserRoles_RoleId",
                 table: "Identity.UserRoles",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OFACAssessmentBasisWithClient_ClientId",
+                table: "OFACAssessmentBasisWithClient",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OFACControlsWithClient_ClientId",
+                table: "OFACControlsWithClient",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OFACRiskMatrices_ClientId",
+                table: "OFACRiskMatrices",
+                column: "ClientId");
         }
 
         /// <inheritdoc />
@@ -684,7 +789,16 @@ namespace RA_KYC_BE.Infrastructure.Migrations
                 name: "OFACAssessmentBasis");
 
             migrationBuilder.DropTable(
+                name: "OFACAssessmentBasisWithClient");
+
+            migrationBuilder.DropTable(
                 name: "OFACControl");
+
+            migrationBuilder.DropTable(
+                name: "OFACControlsWithClient");
+
+            migrationBuilder.DropTable(
+                name: "OFACRiskMatrices");
 
             migrationBuilder.DropTable(
                 name: "CustomerDetails");

@@ -1,4 +1,6 @@
-﻿namespace RA_KYC_BE.Application.Dtos.BSA
+﻿using RA_KYC_BE.Application.Dtos.Clients;
+
+namespace RA_KYC_BE.Application.Dtos.BSA
 {
     public class BSARiskMatrixDTO
     {
@@ -9,5 +11,6 @@
         public string InherentRisk { get; set; }
         public string MitigatingControls { get; set; }
         public string ResidualRisk { get; set; }
+        //public ClientsDto Client { get; set; }
     }
 }

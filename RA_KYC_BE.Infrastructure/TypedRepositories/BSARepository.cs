@@ -27,7 +27,7 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
 
         public async Task<List<BSARiskMatrix>> GetMatricesByClientId(int clientId)
         {
-            return await _context.BSARiskMatrices.Where(m => clientId > 0 ? m.ClientId == clientId : true).ToListAsync();
+            return await _context.BSARiskMatrices.Where(m => clientId > 0 ? m.ClientId == clientId : true).Include(m=>m.Client).ToListAsync();
         }
 
         public async Task ImportMitigatingControlsFiles(ImportFilesModel importRiskCategoriesModel)
@@ -219,14 +219,13 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                         var strong3 = Convert.ToString(reader.GetValue(3)).Trim();
                                         var adequate2 = Convert.ToString(reader.GetValue(4)).Trim();
                                         var weak1 = Convert.ToString(reader.GetValue(5)).Trim();
-                                        var score = Convert.ToString(reader.GetValue(6)).Trim();
-                                        var comments = Convert.ToString(reader.GetValue(7)).Trim();
-                                        var documents = Convert.ToString(reader.GetValue(8)).Trim();
+                                        var comments = Convert.ToString(reader.GetValue(6)).Trim();
+                                        var documents = Convert.ToString(reader.GetValue(7)).Trim();
 
                                         if (code == "Code" && controlCode == "Control Code" &&
                                             category == "Category" && strong3 == "Strong (3)" &&
                                             adequate2 == "Adequate (2)" && weak1 == "Weak (1)" &&
-                                            score == "Score" && comments == "Comments:" && documents == "Documents")
+                                            comments == "Comments:" && documents == "Documents")
                                         {
                                             IsHeaderLoopItrate = true;
                                         }
@@ -237,15 +236,14 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                                         {
                                             oFACControls.Add(new OFACControl
                                             {
-                                                ParentCode = Convert.ToString(reader.GetValue(0)).Trim(),
+                                                Code = Convert.ToString(reader.GetValue(0)).Trim(),
                                                 ControlCode = Convert.ToString(reader.GetValue(1)).Trim(),
                                                 Category = Convert.ToString(reader.GetValue(2)).Trim(),
-                                                Strong3 = Convert.ToString(reader.GetValue(3)),
-                                                Adequate2 = (Convert.ToString(reader.GetValue(4)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(4)).Trim(),
-                                                Weak1 = (Convert.ToString(reader.GetValue(5)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(5)).Trim(),
-                                                Score = Convert.ToDecimal(Convert.ToString(reader.GetValue(6)).Trim() == "_" ? 0.00 : Convert.ToString(reader.GetValue(6)).Trim()),
-                                                Comments = Convert.ToString(reader.GetValue(7)),
-                                                Documents = Convert.ToString(reader.GetValue(8)),
+                                                StrongQuestion = Convert.ToString(reader.GetValue(3)),
+                                                AdequateQuestion = (Convert.ToString(reader.GetValue(4)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(4)).Trim(),
+                                                WeakQuestion = (Convert.ToString(reader.GetValue(5)).Trim() == "N/A") ? string.Empty : Convert.ToString(reader.GetValue(5)).Trim(),
+                                                Comments = Convert.ToString(reader.GetValue(6)),
+                                                Documents = Convert.ToString(reader.GetValue(7)),
                                                 CreatedOn = DateTimeOffset.UtcNow
                                             });
                                         }
