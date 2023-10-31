@@ -1,4 +1,5 @@
 ﻿using Application.Dtos.Account;
+using Application.Dtos.Email;
 using Application.Interfaces;
 using Domain.Settings;
 using Microsoft.AspNetCore.Identity;
@@ -117,7 +118,8 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                 FirstName = model.FirstName,
                 LastName = model.LastName,
                 UserName = model.Username,
-                Email = model.Email
+                Email = model.Email,
+                IsApproved = false
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -135,23 +137,25 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             }
 
             //assign role to user by default
-            await _userManager.AddToRoleAsync(user, "User");
+            await _userManager.AddToRoleAsync(user, "Customer");
 
             #region SendVerificationEmail
 
-            //var verificationUri = await SendVerificationEmail(user, orgin);
+            var verificationUri = await SendVerificationEmail(user, orgin);
 
-            //await _emailSender.SendEmailAsync(new EmailRequest() 
-            //{ 
-            //    ToEmail = user.Email, Body = $"Please confirm your account by visiting this URL {verificationUri}", Subject = "Confirm Registration" 
-            //});
+            await _emailSender.SendEmailAsync(new EmailRequest()
+            {
+                ToEmail = user.Email,
+                Body = $"Please confirm your account by visiting this URL {verificationUri}",
+                Subject = "Confirm Registration"
+            });
 
             #endregion SendVerificationEmail
 
             var jwtSecurityToken = await CreateJwtAsync(user);
 
             auth.Email = user.Email;
-            auth.Roles = new List<string> { "User" };
+            auth.Roles = new List<string> { "Customer" };
             auth.ISAuthenticated = true;
             auth.UserName = user.UserName;
             auth.Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
@@ -181,14 +185,13 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             var user = await _userManager.FindByEmailAsync(model.Email);
             var userpass = await _userManager.CheckPasswordAsync(user, model.Password);
 
-            if (user == null || !userpass)
+            if (user == null || !userpass || !user.IsApproved)
             {
                 auth.Message = "Email or Password is incorrect";
                 return auth;
             }
 
             var jwtSecurityToken = await CreateJwtAsync(user);
-
             var roles = await _userManager.GetRolesAsync(user);
 
             auth.Id = user.Id;

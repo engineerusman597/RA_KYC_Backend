@@ -9,11 +9,10 @@ namespace RA_KYC_BE.Infrastructure.Identity.Models
         [Required]
         [MaxLength(50)]
         public string FirstName { get; set; }
-
         [Required]
         [MaxLength(50)]
         public string LastName { get; set; }
-
+        public bool IsApproved { get; set; }
         public List<RefreshToken>? RefreshTokens { get; set; }
     }
 }
