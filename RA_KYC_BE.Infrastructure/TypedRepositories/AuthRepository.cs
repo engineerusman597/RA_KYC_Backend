@@ -142,19 +142,19 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
             #region SendVerificationEmail
 
             var verificationUri = await SendVerificationEmail(user, orgin);
-            await _emailSender.SendEmailAsync(new EmailRequest()
-            {
-                ToEmail = user.Email,
-                Body = $"Dear {user.FirstName} {user.LastName}, {Environment.NewLine} You have been registered with email {user.Email}. Your new account is in review process and once it is approved, you will get an email. So please wait until your account is approved.",
-                Subject = "Registration"
-            });
+            //await _emailSender.SendEmailAsync(new EmailRequest()
+            //{
+            //    ToEmail = user.Email,
+            //    Body = $"Dear {user.FirstName} {user.LastName}, {Environment.NewLine} You have been registered with email {user.Email}. Your new account is in review process and once it is approved, you will get an email. So please wait until your account is approved.",
+            //    Subject = "Registration"
+            //});
 
-            await _emailSender.SendEmailAsync(new EmailRequest()
-            {
-                ToEmail = "whitney.rolle@tppsst.com",
-                Body = $"User with {user.Email} just got registered. Please login with the admin account, review this user and approve.",
-                Subject = "New User Registration"
-            });
+            //await _emailSender.SendEmailAsync(new EmailRequest()
+            //{
+            //    ToEmail = "whitney.rolle@tppsst.com",
+            //    Body = $"User with {user.Email} just got registered. Please login with the admin account, review this user and approve.",
+            //    Subject = "New User Registration"
+            //});
 
            
 

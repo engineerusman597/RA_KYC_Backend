@@ -59,6 +59,8 @@ namespace RA_KYC_BE.Infrastructure.TypedRepositories
                 {
                     x.IsApproved = model.IsApproved;
                 });
+
+                await _unitOfWork.Complete();
                 return true;
             }
             catch (Exception)

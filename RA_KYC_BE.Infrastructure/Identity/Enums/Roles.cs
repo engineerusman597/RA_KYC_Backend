@@ -4,7 +4,7 @@
     {
         SuperAdmin = 0,
         Admin = 1,
-        Moderator = 2,
+        Customer = 2,
         User = 3
     }
 }

@@ -10,7 +10,7 @@ namespace Infrastructure.Identity.Seeds
         {
             await roleManager.CreateAsync(new AppRole(Roles.SuperAdmin.ToString()));
             await roleManager.CreateAsync(new AppRole(Roles.Admin.ToString()));
-            await roleManager.CreateAsync(new AppRole(Roles.Moderator.ToString()));
+            await roleManager.CreateAsync(new AppRole(Roles.Customer.ToString()));
             await roleManager.CreateAsync(new AppRole(Roles.User.ToString()));
 
         }
